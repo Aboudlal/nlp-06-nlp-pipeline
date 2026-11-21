@@ -47,7 +47,7 @@ import logging
 
 from datafun_toolkit.logger import get_logger, log_header, log_path
 
-from nlp.config import (
+from nlp.config_abdellah import (
     DATA_PATH,
     HTTP_REQUEST_HEADERS,
     PAGE_URL,
