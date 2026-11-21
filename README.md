@@ -13,9 +13,17 @@
 
 ## Project Overview
 
-Author: Denise Case
+Author: Abdellah Boudlal
 
-Date: 2026 October
+Date: 2026 November
+
+## My Project Plan
+
+I plan to analyze a different arXiv abstract about large language
+models, examine vocabulary richness, and visualize the top 15 tokens.
+
+Based on the example project by Denise Case:
+https://github.com/denisecase/nlp-06-nlp-pipeline
 
 Sixth project in the Web Mining and Applied NLP course.
 
