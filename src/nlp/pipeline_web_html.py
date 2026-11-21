@@ -1,3 +1,6 @@
+# Author: Abdellah Boudlal
+# Date: 2026-11
+
 """src/nlp/pipeline_web_html.py - Module 6 Script.
 
 NO EDITS REQUIRED IN THIS FILE (if the paths have not changed.)

@@ -1,3 +1,6 @@
+# Author: Abdellah Boudlal
+# Date: 2026-11
+
 """stage04_analyze.py.
 
 (MODIFY YOUR VERSION OF THIS FILE)

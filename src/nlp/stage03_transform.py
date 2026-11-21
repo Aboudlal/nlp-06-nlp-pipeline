@@ -1,3 +1,6 @@
+# Author: Abdellah Boudlal
+# Date: 2026-11
+
 """stage03_transform.py.
 
 (EDIT YOUR VERSION OF THIS FILE)

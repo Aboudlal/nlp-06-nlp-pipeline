@@ -1,3 +1,6 @@
+# Author: Abdellah Boudlal
+# Date: 2026-11
+
 """src/nlp/stage05_load.py.
 
 NO EDITS REQUIRED IN THIS FILE (if paths have not changed.)
