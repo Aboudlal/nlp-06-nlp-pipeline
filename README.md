@@ -1,11 +1,11 @@
-# NLP Pipeline: Web Text Analysis
+# BERT Abstract: NLP Pipeline and Vocabulary Analysis
 
 [![CI](https://github.com/Aboudlal/nlp-06-nlp-pipeline-custom/actions/workflows/ci-python-zensical.yml/badge.svg)](https://github.com/Aboudlal/nlp-06-nlp-pipeline-custom/actions/workflows/ci-python-zensical.yml)
 [![Documentation](https://img.shields.io/badge/docs-site-blue)](https://aboudlal.github.io/nlp-06-nlp-pipeline-custom/)
 [![Python](https://img.shields.io/badge/python-3.14%2B-blue)](pyproject.toml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-> A reproducible pipeline for extracting, cleaning, analyzing, and visualizing web text.
+> Extract, clean, analyze, and visualize an academic abstract using a reproducible EVTAL pipeline.
 
 **Author:** Abdellah Boudlal
 **Date:** 2026-11
@@ -13,89 +13,69 @@
 
 ## Project Overview
 
-This project uses an Extract, Validate, Transform, Analyze, Load
-(EVTAL) pipeline to turn an academic paper's web page into structured
-data and vocabulary visualizations.
+This project analyzes the abstract of the BERT research paper
+using an Extract, Validate, Transform, Analyze, Load (EVTAL) pipeline.
 
-The pipeline retrieves HTML, validates the document structure,
-extracts metadata, cleans the abstract, calculates vocabulary
-statistics, and saves the results.
+Building on my Module 5 project, it retrieves the paper's arXiv
+page, validates its HTML structure, extracts metadata, processes
+the abstract, and generates vocabulary statistics and visualizations.
 
-This project is adapted from
+The main analytical question is:
+
+**How does stopword removal affect token frequencies and vocabulary
+measurements in the BERT abstract?**
+
+The project analyzes the text of the paper's abstract.
+It uses spaCy for text processing; it does not run the BERT model.
+
+Adapted from
 [Denise Case's example project](https://github.com/denisecase/nlp-06-nlp-pipeline).
-
-## Project Progress
-
-- Ran the original example successfully.
-- Verified the original project with its automated test.
-- Created a separate pipeline file for customization.
-- Ran an experiment displaying the top 15 tokens instead of 20.
-- Planned the next application: analyze the academic paper selected
-  for my Module 5 project and investigate a preprocessing decision.
-
-The results reported below describe the original example paper.
-The application to a different paper is still planned.
 
 ## Data
 
-The current pipeline analyzes the arXiv abstract page for
-[Agents of Chaos](https://arxiv.org/abs/2602.20021).
+The custom pipeline retrieves:
 
-It extracts:
+[BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding](https://arxiv.org/abs/1810.04805)
 
-- Paper title and authors.
+Authors: Jacob Devlin, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova.
+
+The pipeline extracts:
+
+- Title and authors.
 - Abstract text.
 - Subject information.
 - Submission information.
 - arXiv identifier.
 
-The raw HTML is preserved so the extracted information can be inspected.
+The analysis covers one abstract, containing 141
+whitespace-separated words, rather than the full paper.
 
 ## Methods and Tools
 
 | Stage | Purpose | Tools |
 | --- | --- | --- |
-| Extract | Retrieve and preserve HTML | Requests |
-| Validate | Check required HTML elements | BeautifulSoup |
+| Extract | Retrieve HTML and save the source document | Requests |
+| Validate | Check expected HTML elements | BeautifulSoup |
 | Transform | Extract metadata, clean text, and calculate features | BeautifulSoup, spaCy, Pandas |
-| Analyze | Count tokens and generate visualizations | Counter, Matplotlib, WordCloud |
-| Load | Save the processed dataset | Pandas, CSV |
+| Analyze | Count token frequencies and generate visuals | Counter, Matplotlib, WordCloud |
+| Load | Export the structured results | Pandas, CSV |
 
 The project uses spaCy's `en_core_web_sm` English model for
-tokenization and identifying stopwords and punctuation.
+tokenization and identifying stopwords, punctuation, and whitespace.
 
-Although the model also supports part-of-speech tagging and named
-entity recognition, the current analysis does not use those annotations.
-
-Vocabulary measurements include:
+The analysis calculates:
 
 - Raw abstract word count.
-- Cleaned token count.
+- Processed token count.
 - Unique token count.
-- Type-token ratio (TTR).
+- Type-token ratio.
 - Token frequencies.
+- Author count.
 
-TTR is calculated as:
+**TTR = unique token count / total token count**
 
-**TTR = unique token count / total cleaned token count**
-
-## Project Structure
-
-| File or Directory | Purpose |
-| --- | --- |
-| `src/nlp/pipeline_web_html.py` | Original example pipeline |
-| `src/nlp/pipeline_web_html_custom.py` | Separate pipeline containing my technical modification |
-| `src/nlp/config.py` | Source URL and output paths |
-| `src/nlp/stage01_extract.py` | HTML retrieval |
-| `src/nlp/stage02_validate.py` | HTML structure validation |
-| `src/nlp/stage03_transform.py` | Text cleaning and feature engineering |
-| `src/nlp/stage04_analyze.py` | Frequency analysis and visualization |
-| `src/nlp/stage05_load.py` | CSV export |
-| `data/` | Raw and processed outputs |
-| `docs/` | Project documentation |
-| `tests/` | Automated tests |
-| `pyproject.toml` | Dependencies and project configuration |
-| `.github/workflows/` | Automated checks and documentation deployment |
+Part-of-speech tagging and named entity recognition are available
+in the spaCy model but are not used in this analysis.
 
 ## Setup
 
@@ -120,24 +100,28 @@ Runtime dependencies are declared in `pyproject.toml`:
 - spacy
 - en-core-web-sm
 
-For additional setup guidance, see the
+For additional setup instructions, see the
 [Professional Python Workflow Guide](https://denisecase.github.io/pro-analytics-02/).
 
 ## Run the Project
 
-Run commands from the project root.
+Run commands from the repository root.
 
-### Original Example
+### Custom BERT Pipeline
+
+```powershell
+uv run python -m nlp.pipeline_web_html_custom
+```
+
+The current custom transformation retains stopwords.
+
+### Original Example Pipeline
 
 ```powershell
 uv run python -m nlp.pipeline_web_html
 ```
 
-### Modified Pipeline
-
-```powershell
-uv run python -m nlp.pipeline_web_html_custom
-```
+The original example analyzes *Agents of Chaos*.
 
 Successful execution ends with:
 
@@ -145,15 +129,21 @@ Successful execution ends with:
 Pipeline executed successfully!
 ```
 
-Both commands currently write to the same output paths.
-Running either pipeline replaces the previous generated outputs.
+The custom pipeline uses separate BERT HTML and CSV filenames.
+Both pipelines use `case_top_tokens.png` and `case_wordcloud.png`
+for their generated charts, so these images are replaced on each run.
 
-## Technical Experiment: Top 15 Tokens
+Named copies in `docs/images/` preserve the comparison visuals.
 
-### Modification
+## Technical Experiment: Top 20 vs. Top 15
 
-I created `pipeline_web_html_custom.py` as a copy of the original
-pipeline and added `top_n=15` to its analysis call:
+Before analyzing BERT, I made a small technical modification using
+the original *Agents of Chaos* example.
+
+### Modification and Reason
+
+I copied the original pipeline into `pipeline_web_html_custom.py`
+and added `top_n=15` to the analysis call:
 
 ```python
 run_analyze(
@@ -163,10 +153,8 @@ run_analyze(
 )
 ```
 
-### Reason
-
-I chose this modification to make the frequency chart more focused
-by displaying fewer tokens.
+I chose this change to make the chart more focused by displaying
+fewer tokens.
 
 ### Prediction
 
@@ -176,102 +164,222 @@ extraction and cleaning steps were unchanged.
 
 ### Observed Result
 
-The modified pipeline completed successfully. The log reported
-“Top 15 token frequency - bar chart” and listed 15 tokens.
+The modified pipeline completed successfully and displayed
+the top 15 tokens.
 
-The cleaned token count remained 130, the unique token count
-remained 118, and TTR remained 0.9077.
+Both example runs produced:
+
+| Measurement | Original: Top 20 | Modified: Top 15 |
+| --- | --- | --- |
+| Processed tokens | 130 | 130 |
+| Unique tokens | 118 | 118 |
+| Type-token ratio | 0.9077 | 0.9077 |
 
 ### What I Learned
 
-The number of displayed tokens changes the presentation of the
-analysis without changing the underlying vocabulary statistics.
-Showing fewer terms also leaves out some lower-ranked vocabulary.
+The display limit changes how much vocabulary is shown without
+changing the underlying text statistics. A shorter chart also
+omits some lower-ranked terms.
+
+## Custom Application: BERT Stopword Comparison
+
+I adapted the pipeline to the paper selected for my Module 5
+project and investigated one preprocessing decision.
+
+### Custom Files
+
+- `config_abdellah.py` defines the BERT source and output paths.
+- `pipeline_web_html_custom.py` runs the custom workflow.
+- `stage03_transform_abdellah.py` retains stopwords during cleaning.
+
+The original processing files remain available as examples.
+
+### Prediction
+
+Retaining stopwords would increase the token count and introduce
+common grammatical words into the most frequent tokens.
+
+The effect on TTR would be measured from the output.
+
+### Preprocessing Change
+
+The original transformation removes stopwords, punctuation,
+and whitespace tokens:
+
+```python
+if not (token.is_stop or token.is_punct or token.is_space)
+```
+
+The custom transformation retains stopwords:
+
+```python
+if not (token.is_punct or token.is_space)
+```
+
+The source document and other processing steps stayed the same.
+
+### Reproduce Both Settings
+
+In `pipeline_web_html_custom.py`, use the following import for
+the stopword-removed analysis:
+
+```python
+from nlp.stage03_transform import run_transform
+```
+
+Use the following import for the retained-stopword analysis:
+
+```python
+from nlp.stage03_transform_abdellah import run_transform
+```
+
+Select only one of these imports, save the file, and run:
+
+```powershell
+uv run python -m nlp.pipeline_web_html_custom
+```
+
+The two settings overwrite the same main BERT CSV and chart paths.
+Separate snapshots preserve the recorded comparison.
 
 ## Results
 
-The original run and the modified run produced the same text statistics:
+### Vocabulary Measurements
 
-| Metric | Original: Top 20 | Modified: Top 15 |
+| Measurement | Stopwords Removed | Stopwords Retained |
 | --- | --- | --- |
-| Raw abstract word count | 177 | 177 |
-| Cleaned token count | 130 | 130 |
-| Unique token count | 118 | 118 |
-| Type-token ratio | 0.9077 | 0.9077 |
-| Author count | 38 | 38 |
-| Tokens displayed in frequency chart | 20 | 15 |
+| Raw abstract word count | 141 | 141 |
+| Processed tokens | 106 | 151 |
+| Unique tokens | 78 | 103 |
+| Type-token ratio | 0.7358 | 0.6821 |
+| Authors | 4 | 4 |
 
-The most frequent tokens were:
+Removing stopwords excluded 45 token occurrences and 25 distinct
+token types.
 
-| Token | Count |
-| --- | --- |
-| report | 3 |
-| agents | 3 |
-| system | 3 |
-| language | 2 |
-| execution | 2 |
-| researchers | 2 |
-| conditions | 2 |
-| behaviors | 2 |
-| vulnerabilities | 2 |
+Retaining stopwords increased both total and unique token counts,
+but total tokens increased proportionally more. TTR therefore
+decreased from 0.7358 to 0.6821.
 
-### Generated Outputs
+The raw word count uses whitespace splitting, while the processed
+count follows spaCy tokenization. These are different measurements:
+one whitespace-separated expression can produce multiple tokens.
 
-| Path | Output |
-| --- | --- |
-| `project.log` | Execution log |
-| `data/raw/case_raw.html` | Retrieved HTML |
-| `data/processed/case_processed.csv` | Metadata and NLP features |
-| `data/processed/case_top_tokens.png` | Token frequency chart |
-| `data/processed/case_wordcloud.png` | Word cloud |
+### Stopwords Removed
 
-### Reference Visualizations
+The most frequent tokens were “language,” “absolute,” and
+“improvement,” each appearing four times.
 
-These images are supplied with the original example. They illustrate
-the baseline analysis and are not evidence of my top-15 modification.
+![BERT top 15 tokens with stopwords removed](docs/images/bert_top15.png)
 
-![Original example token frequency chart](docs/images/case_top_tokens.png)
+### Stopwords Retained
 
-![Original example word cloud](docs/images/case_wordcloud.png)
+The most frequent token became “to,” appearing six times.
+“And” and “the” each appeared four times.
+
+![BERT top 15 tokens with stopwords retained](docs/images/bert_top15_with_stopwords.png)
+
+### Word Cloud
+
+![BERT word cloud with stopwords removed](docs/images/bert_wordcloud.png)
+
+The word cloud provides a visual overview. The frequency charts
+and tables provide the exact comparisons.
 
 ## Interpretation and Limitations
 
-Terms such as “agents,” “system,” and “vulnerabilities” are consistent
-with the abstract's discussion of autonomous agents and their behavior.
+Removing stopwords made the frequency chart more focused on
+topic-related vocabulary. “Language” and “bert” reflect the subject,
+while “absolute,” “improvement,” and “point” reflect the abstract's
+discussion of evaluation results.
 
-The TTR of 0.9077 indicates relatively little repetition in the cleaned
-abstract. However, this is a short text, and short texts tend to have
-higher TTRs. This value should not be treated as a measure of paper
-quality or compared directly with much longer documents.
+Retaining stopwords preserves more grammatical information,
+but common words occupy more positions in the top-15 chart.
 
-The analysis has several limitations:
+The higher TTR after filtering reflects the preprocessing choice.
+It does not establish that the text became better or more informative.
 
-- It examines one abstract rather than the full paper.
-- Token frequencies do not explain the context of each occurrence.
+Limitations include:
+
+- Only one abstract is analyzed.
+- TTR depends on text length, tokenization, and preprocessing.
+- Frequencies do not explain sentence context or verify research claims.
 - Lowercasing removes capitalization information.
-- Removing stopwords and punctuation can remove useful meaning.
-- Words with equal frequencies may appear in an order that does not
-  represent a meaningful difference in importance.
+- Stopword removal can discard meaningful words.
+- Punctuation removal can break meaningful expressions.
+- No lemmatization is applied, so “model” and “models” remain separate.
+- WordCloud applies additional default processing when generating
+  an image from text, including its own stopword filtering.
+
+The bar charts, CSV metrics, and logged counts are the primary
+evidence for the preprocessing comparison.
+
+See the [full project report](https://aboudlal.github.io/nlp-06-nlp-pipeline-custom/)
+for additional explanation.
+
+## Project Structure
+
+| File or Directory | Purpose |
+| --- | --- |
+| `src/nlp/pipeline_web_html.py` | Original example pipeline |
+| `src/nlp/pipeline_web_html_custom.py` | Custom BERT pipeline with top-15 analysis |
+| `src/nlp/config.py` | Original example configuration |
+| `src/nlp/config_abdellah.py` | BERT source and output configuration |
+| `src/nlp/stage01_extract.py` | HTML retrieval |
+| `src/nlp/stage02_validate.py` | HTML structure validation |
+| `src/nlp/stage03_transform.py` | Original transformation with stopword removal |
+| `src/nlp/stage03_transform_abdellah.py` | Custom transformation retaining stopwords |
+| `src/nlp/stage04_analyze.py` | Frequency analysis and visualization |
+| `src/nlp/stage05_load.py` | CSV export |
+| `data/` | Source HTML and processed results |
+| `docs/index.md` | Custom project report |
+| `docs/images/` | Saved comparison visuals |
+| `tests/` | Automated tests |
+| `pyproject.toml` | Dependencies and project configuration |
+| `.github/workflows/` | Automated checks and documentation deployment |
+
+## Saved Outputs
+
+| Path | Content |
+| --- | --- |
+| `data/raw/abdellah_bert_raw.html` | Retrieved BERT HTML |
+| `data/processed/abdellah_bert.csv` | Most recent custom run |
+| `data/processed/abdellah_bert_without_stopwords.csv` | Snapshot with stopwords removed |
+| `data/processed/abdellah_bert_with_stopwords.csv` | Snapshot with stopwords retained |
+| `docs/images/bert_top15.png` | Chart with stopwords removed |
+| `docs/images/bert_top15_with_stopwords.png` | Chart with stopwords retained |
+| `docs/images/bert_wordcloud.png` | Word cloud from the stopword-removed run |
+| `docs/images/bert_wordcloud_with_stopwords.png` | Word cloud generated during the retained-stopword run |
+
+The word-cloud images may filter stopwords independently of the
+pipeline, so they should not be treated as exact token comparisons.
 
 ## Verification
 
-Run the automated tests:
+Both BERT preprocessing runs completed successfully.
+The validation logs confirmed the expected HTML elements were present.
+
+The documentation build also completed with:
+
+```text
+No issues found
+```
+
+The initial automated test run reported:
+
+- One test passed.
+- 82.46% total coverage.
+- The required minimum coverage of 20% was satisfied.
+
+These test figures describe the initial example before the custom
+files were added. They are not a coverage measurement of the final
+custom implementation.
+
+To run the current tests:
 
 ```powershell
 uv run python -m pytest
 ```
-
-The original project test run completed with:
-
-- **1 test passed.**
-- **82.46% total coverage.**
-- **20% required minimum coverage satisfied.**
-
-These figures describe the original test run before the separate
-custom pipeline file was added.
-
-The modified pipeline was also run successfully to verify that it
-generated the top-15 analysis.
 
 ## Development Checks
 
@@ -284,7 +392,7 @@ git add -A
 uvx prek run --all-files
 ```
 
-If hooks modify files, review and save the changes, then repeat:
+If hooks modify files, review the changes and repeat:
 
 ```powershell
 git add -A
@@ -309,28 +417,29 @@ git commit -m "Describe what changed and why"
 git push
 ```
 
-## Next Steps
+## Possible Extensions
 
-- Apply the pipeline to the paper selected for Module 5.
-- Create separate configuration and processing-stage copies as needed.
-- Compare a preprocessing choice and record its effect on the results.
-- Publish the custom charts with an explanation of the findings.
-- Update the documentation with the selected paper, limitations,
-  and possible extensions.
+- Add a configuration option for stopword removal.
+- Save each preprocessing setting to separate paths automatically.
+- Generate word clouds directly from measured token frequencies.
+- Investigate lemmatization and hyphenated expressions.
+- Compare multiple abstracts while accounting for differences in length.
 
 ## Documentation and Automation
 
-The project documentation is published with Zensical and GitHub Pages.
+The project documentation is built with Zensical and published
+through GitHub Pages.
 
-- [Hosted documentation](https://aboudlal.github.io/nlp-06-nlp-pipeline-custom/)
-- [Documentation source](docs/index.md)
+- [Hosted Documentation](https://aboudlal.github.io/nlp-06-nlp-pipeline-custom/)
+- [Report Source](docs/index.md)
 - [GitHub Actions](https://github.com/Aboudlal/nlp-06-nlp-pipeline-custom/actions)
-- [Commit history](https://github.com/Aboudlal/nlp-06-nlp-pipeline-custom/commits/main/)
+- [Commit History](https://github.com/Aboudlal/nlp-06-nlp-pipeline-custom/commits/main/)
 
-## Credits and Links
+## Credits and Resources
 
-- [Original example by Denise Case](https://github.com/denisecase/nlp-06-nlp-pipeline)
-- [Current data source: Agents of Chaos](https://arxiv.org/abs/2602.20021)
+- [Original Example by Denise Case](https://github.com/denisecase/nlp-06-nlp-pipeline)
+- [BERT Paper and Abstract](https://arxiv.org/abs/1810.04805)
+- [Original Experiment Data: Agents of Chaos](https://arxiv.org/abs/2602.20021)
 - [Professional Python Workflow Guide](https://denisecase.github.io/pro-analytics-02/)
 - [NLP Evolution](docs/nlp-evolution.md)
 - [Citation](CITATION.cff)
