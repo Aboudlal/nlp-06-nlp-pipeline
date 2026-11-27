@@ -11,6 +11,38 @@
 **Date:** 2026-11
 **Course:** Web Mining and Applied NLP — Module 6
 
+
+## Peer Review — Module 7
+
+This project is ready for peer review.
+
+Follow the setup instructions below, then run the custom BERT pipeline
+from the repository root:
+
+```powershell
+uv run python -m nlp.pipeline_web_html_custom
+```
+
+The current version retains stopwords. Expected results include:
+
+- 151 processed tokens.
+- 103 unique tokens.
+- A type-token ratio of 0.6821.
+- A top-15 token chart, a word cloud, and a CSV export.
+
+Compare your output with the “Stopwords Retained” column in the Results section.
+
+I would appreciate feedback on:
+
+- Whether the installation and execution instructions are easy to follow.
+- Whether the stopword comparison and visualizations are clear.
+- Whether the README and documentation explain the results and limitations well.
+
+Running the pipeline replaces the main output files. Saved comparison
+snapshots are listed in the Saved Outputs section.
+
+[Read the project documentation](https://aboudlal.github.io/nlp-06-nlp-pipeline-custom/)
+
 ## Project Overview
 
 This project analyzes the abstract of the BERT research paper

@@ -4,6 +4,29 @@
 **Date:** 2026-11
 **Course:** Web Mining and Applied NLP — Project 06
 
+
+## Peer Review — Module 7
+
+This project is ready for peer review.
+
+Start with the
+[README setup instructions](https://github.com/Aboudlal/nlp-06-nlp-pipeline-custom#setup),
+then run the custom pipeline from the repository root:
+
+```powershell
+uv run python -m nlp.pipeline_web_html_custom
+```
+
+The current version retains stopwords. Expected results are
+151 processed tokens, 103 unique tokens, and a type-token ratio of 0.6821.
+
+The pipeline also generates a frequency chart, a word cloud, and a CSV file.
+Running it replaces the main output files; separate snapshots preserve
+the recorded comparison.
+
+I welcome feedback on the setup instructions, reproducibility,
+visualizations, and explanation of the stopword comparison.
+
 ## Overview
 
 This project applies an Extract, Validate, Transform, Analyze,
